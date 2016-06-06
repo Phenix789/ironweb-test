@@ -26,7 +26,7 @@ class LoadData implements FixtureInterface
      */
     public function load(ObjectManager $manager)
     {
-        $this->createFixedArticles($manager);
+        //$this->createFixedArticles($manager);
         $this->createRandomArticles($manager, 10, 5, 10);
 
         $manager->flush();
@@ -57,13 +57,13 @@ class LoadData implements FixtureInterface
      */
     private function createRandomArticles(ObjectManager $manager, $nbArticles, $nbCommentsMax, $nbRatesMax)
     {
-        $faker = Factory::create();
+        $faker = Factory::create('en');
 
         $i = 0;
         while ($i++ < $nbArticles) {
             //Article
             $article = new Article();
-            $article->setTitle($faker->title);
+            $article->setTitle($faker->sentence);
             $article->setContent($faker->text(rand(200, 1000)));
             $article->setDate($faker->dateTimeThisYear);
 

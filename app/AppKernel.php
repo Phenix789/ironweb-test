@@ -22,6 +22,7 @@ class AppKernel extends Kernel
             new \FOS\RestBundle\FOSRestBundle(),
             new \JMS\SerializerBundle\JMSSerializerBundle(),
             new \Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
+            new \Nelmio\ApiDocBundle\NelmioApiDocBundle(),
 
             //Project Bundles
             new IronwebBundle\IronwebBundle()

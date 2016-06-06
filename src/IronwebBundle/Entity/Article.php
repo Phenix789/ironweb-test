@@ -25,6 +25,9 @@ class Article
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @Serializer\Expose()
+     * @Serializer\Groups({"list", "show"})
      */
     private $id;
 
@@ -37,6 +40,7 @@ class Article
      * @Constraints\NotBlank()
      *
      * @Serializer\Expose()
+     * @Serializer\Groups({"list", "show"})
      */
     private $title;
 
@@ -46,6 +50,7 @@ class Article
      * @ORM\Column(name="content", type="text")
      *
      * @Serializer\Expose()
+     * @Serializer\Groups({"show"})
      */
     private $content;
 
@@ -55,6 +60,7 @@ class Article
      * @ORM\Column(name="date", type="datetime")
      *
      * @Serializer\Expose()
+     * @Serializer\Groups({"list", "show"})
      */
     private $date;
 
@@ -62,6 +68,7 @@ class Article
      * @var Comment[]
      *
      * @ORM\OneToMany(targetEntity="Comment", mappedBy="article")
+     * @Serializer\Groups({"show"})
      */
     private $comments;
 
@@ -69,8 +76,33 @@ class Article
      * @var Rate[]
      *
      * @ORM\OneToMany(targetEntity="Rate", mappedBy="article")
+     * @Serializer\Groups({"show"})
      */
     private $rates;
+
+    /**
+     * @return float
+     *
+     * @author <ramseyer.claude@gumi-europe.com>
+     *
+     * @Serializer\VirtualProperty()
+     * @Serializer\Groups({"list"})
+     */
+    public function getRate()
+    {
+        $rates = $this->getRates();
+        $count = count($rates);
+        if ($count > 0) {
+            $value = 0;
+            foreach ($rates as $rate) {
+                $value += $rate->getRate();
+            }
+
+            return round($value / $count, 2);
+        }
+
+        return 0;
+    }
 
     /**
      * @return int
@@ -168,6 +200,26 @@ class Article
     public function setComments($comments)
     {
         $this->comments = $comments;
+
+        return $this;
+    }
+
+    /**
+     * @return Rate[]
+     */
+    public function getRates()
+    {
+        return $this->rates;
+    }
+
+    /**
+     * @param Rate[] $rates
+     *
+     * @return $this
+     */
+    public function setRates($rates)
+    {
+        $this->rates = $rates;
 
         return $this;
     }

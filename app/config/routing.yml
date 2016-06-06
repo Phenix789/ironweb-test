@@ -6,3 +6,7 @@ rest_article:
     type: rest
     prefix: /api/v1
     resource: "@IronwebBundle/Controller/"
+
+NelmioApiDocBundle:
+    resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
+    prefix:   /api/doc
