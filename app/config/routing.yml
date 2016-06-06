@@ -1,0 +1,8 @@
+app:
+    resource: "@AppBundle/Controller/"
+    type:     annotation
+
+rest_article:
+    type: rest
+    prefix: /api/v1
+    resource: "@IronwebBundle/Controller/"
