@@ -88,7 +88,7 @@ class ArticleRestController extends FOSRestController
      */
     public function postArticleAction(ParamFetcher $param)
     {
-        $this->handle(new Article(), $param);
+        return $this->handle($this->getArticleService()->createEntity(), $param);
     }
 
     /**
@@ -129,13 +129,12 @@ class ArticleRestController extends FOSRestController
      */
     private function handle(Article $article, ParamFetcher $param)
     {
-        $this->hydrate($article, $param);
-        $errors = $this->validate($article);
+        $service = $this->getArticleService();
 
+        $service->hydrate($article, $param->all());
+        $errors = $service->validate($article);
         if (!count($errors)) {
-            $manager = $this->getEntityManager();
-            $manager->persist($article);
-            $manager->flush();
+            $service->save($article);
 
             return $article;
         }
@@ -145,46 +144,13 @@ class ArticleRestController extends FOSRestController
     }
 
     /**
-     * @param Article      $article
-     * @param ParamFetcher $param
+     * @return \IronwebBundle\Service\ArticleService
      *
      * @author <ramseyer.claude@gumi-europe.com>
      */
-    private function hydrate(Article $article, ParamFetcher $param)
+    private function getArticleService()
     {
-        if ($value = $param->get('title')) {
-            $article->setTitle($value);
-        }
-
-        if ($value = $param->get('content')) {
-            $article->setContent($value);
-        }
-
-        if ($value = $param->get('date')) {
-            $article->setDate(new \DateTime($value));
-        }
-    }
-
-    /**
-     * @param Article $article
-     *
-     * @return ConstraintViolationListInterface
-     *
-     * @author <ramseyer.claude@gumi-europe.com>
-     */
-    private function validate(Article $article)
-    {
-        return $this->get('validator')->validate($article);
-    }
-
-    /**
-     * @return \Doctrine\Common\Persistence\ObjectManager|null|object
-     *
-     * @author <ramseyer.claude@gumi-europe.com>
-     */
-    private function getEntityManager()
-    {
-        return $this->getDoctrine()->getManagerForClass(Article::class);
+        return $this->get('ironweb.api.article');
     }
 
     /**

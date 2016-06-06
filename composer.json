@@ -31,7 +31,8 @@
         "symfony/phpunit-bridge": "^3.0",
         "doctrine/doctrine-fixtures-bundle": "dev-master",
         "fzaninotto/faker": "v1.6.0",
-        "nelmio/api-doc-bundle": "*"
+        "nelmio/api-doc-bundle": "*",
+        "phpunit/phpunit": "*"
     },
     "scripts": {
         "post-install-cmd": [
