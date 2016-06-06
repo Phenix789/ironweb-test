@@ -39,6 +39,7 @@ class Article
      *
      * @Constraints\NotNull()
      * @Constraints\NotBlank()
+     * @Constraints\Length(max="255")
      *
      * @Serializer\Expose()
      * @Serializer\Groups({"list", "show"})
@@ -52,6 +53,7 @@ class Article
      *
      * @Constraints\NotNull()
      * @Constraints\NotBlank()
+     * @Constraints\Length(max="255")
      *
      * @Serializer\Expose()
      * @Serializer\Groups({"list", "show"})

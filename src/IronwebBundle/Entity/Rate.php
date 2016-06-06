@@ -41,6 +41,7 @@ class Rate
      *
      * @Constraints\NotNull()
      * @Constraints\NotBlank()
+     * @Constraints\Length(max="255")
      *
      * @Serializer\Expose()
      * @Serializer\Groups({"list", "show"})

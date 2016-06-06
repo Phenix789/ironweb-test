@@ -15,6 +15,28 @@ I use many community bundle like :
   * **fzaninotto/faker** For *beautiful* fake data
   * ... and some others
 
+Install
+-------
+
+You can set the project with : *php composer.phar install*
+
+[*composer*](https://getcomposer.org/)
+
+Databases
+---------
+
+You can create database schema with command : *php bin/console doctrine:migrations:migrate*
+
+PHPUnit
+-------
+
+You can launch unit test with command : *php vendor/phpunit/phpunit/phpunit.php*
+
+Fixtures
+--------
+
+You can load data on database with : *php bin/console doctrine:fixtures:load --fixtures=tests/IronwebBundle/DataFixtures/*
+
 Swagger UI
 ----------
 

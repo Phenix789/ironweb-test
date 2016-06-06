@@ -40,8 +40,9 @@ class LoadData implements FixtureInterface
     public function createFixedArticles(ObjectManager $manager)
     {
         $article1 = new Article();
-        $article1->setTitle('');
-        $article1->setContent('');
+        $article1->setUser('root');
+        $article1->setTitle('Test 1');
+        $article1->setContent('Hello World');
         $article1->setDate(new \DateTime('-1days'));
 
         $manager->persist($article1);
@@ -63,6 +64,7 @@ class LoadData implements FixtureInterface
         while ($i++ < $nbArticles) {
             //Article
             $article = new Article();
+            $article->setUser($faker->userName);
             $article->setTitle($faker->sentence);
             $article->setContent($faker->text(rand(200, 1000)));
             $article->setDate($faker->dateTimeThisYear);
@@ -74,6 +76,7 @@ class LoadData implements FixtureInterface
             $comments = rand(0, $nbCommentsMax);
             while ($j++ < $comments) {
                 $comment = new Comment();
+                $comment->setUser($faker->userName);
                 $comment->setContent($faker->text());
                 $comment->setDate($faker->dateTimeBetween($article->getDate()));
                 $comment->setArticle($article);
@@ -86,6 +89,7 @@ class LoadData implements FixtureInterface
             $rates = rand(0, $nbRatesMax);
             while ($k++ < $rates) {
                 $rate = new Rate();
+                $rate->setUser($faker->userName);
                 $rate->setRate($faker->numberBetween(Rate::RATE_MIN, Rate::RATE_MAX));
                 $rate->setDate($faker->dateTimeBetween($article->getDate()));
                 $rate->setArticle($article);
