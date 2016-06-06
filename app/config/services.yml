@@ -7,3 +7,7 @@ services:
     ironweb.api.article:
         class: IronwebBundle\Service\ArticleService
         arguments: [ '@doctrine.orm.entity_manager', '@validator' ]
+
+    ironweb.api.comment:
+        class: IronwebBundle\Service\CommentService
+        arguments: [ '@doctrine.orm.entity_manager', '@validator' ]

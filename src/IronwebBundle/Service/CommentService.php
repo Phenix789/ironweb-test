@@ -4,16 +4,17 @@ namespace IronwebBundle\Service;
 
 use Doctrine\ORM\EntityManager;
 use IronwebBundle\Entity\Article;
+use IronwebBundle\Entity\Comment;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
- * Class ArticleService
+ * Class CommentService
  *
  * @package IronwebBundle\Service
  *
  * @author  <ramseyer.claude@gumi-europe.com>
  */
-class ArticleService
+class CommentService
 {
 
     /** @var EntityManager */
@@ -23,7 +24,7 @@ class ArticleService
     private $validator;
 
     /**
-     * ArticleService constructor.
+     * CommentService constructor.
      *
      * @param EntityManager      $entityManager
      * @param ValidatorInterface $validator
@@ -35,59 +36,59 @@ class ArticleService
     }
 
     /**
-     * @return Article
+     * @return Comment
      *
      * @author <ramseyer.claude@gumi-europe.com>
      */
-    public function createEntity()
+    public function createEntity(Article $article = null)
     {
-        $article = new Article();
-        $article->setDate(new \DateTime());
+        $comment = new Comment();
+        $comment->setDate(new \DateTime());
 
-        return $article;
+        if ($article) {
+            $comment->setArticle($article);
+        }
+
+        return $comment;
     }
 
     /**
-     * @param Article $article
+     * @param Comment $comment
      * @param array   $param
      *
      * @author <ramseyer.claude@gumi-europe.com>
      */
-    public function hydrate(Article $article, array $param)
+    public function hydrate(Comment $comment, array $param)
     {
-        if (isset($param['title'])) {
-            $article->setTitle($param['title']);
-        }
-
         if (isset($param['content'])) {
-            $article->setContent($param['content']);
+            $comment->setContent($param['content']);
         }
 
         if (isset($param['date'])) {
-            $article->setDate(new \DateTime($param['date']));
+            $comment->setDate(new \DateTime($param['date']));
         }
     }
 
     /**
-     * @param Article $article
+     * @param Comment $comment
      *
      * @return \Symfony\Component\Validator\ConstraintViolationListInterface
      *
      * @author <ramseyer.claude@gumi-europe.com>
      */
-    public function validate(Article $article)
+    public function validate(Comment $comment)
     {
-        return $this->validator->validate($article);
+        return $this->validator->validate($comment);
     }
 
     /**
-     * @param Article $article
+     * @param Comment $comment
      *
      * @author <ramseyer.claude@gumi-europe.com>
      */
-    public function save(Article $article)
+    public function save(Comment $comment)
     {
-        $this->entityManager->persist($article);
+        $this->entityManager->persist($comment);
         $this->entityManager->flush();
     }
 

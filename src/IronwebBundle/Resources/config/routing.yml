@@ -1,0 +1,8 @@
+article:
+    type: rest
+    resource: "@IronwebBundle/Controller/ArticleRestController.php"
+
+comment:
+    type: rest
+    parent: article
+    resource: "@IronwebBundle/Controller/CommentRestController.php"

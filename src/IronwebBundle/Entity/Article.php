@@ -2,6 +2,7 @@
 
 namespace IronwebBundle\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints;
@@ -65,7 +66,7 @@ class Article
     private $date;
 
     /**
-     * @var Comment[]
+     * @var Collection|Comment[]
      *
      * @ORM\OneToMany(targetEntity="Comment", mappedBy="article")
      * @Serializer\Groups({"show"})
@@ -73,7 +74,7 @@ class Article
     private $comments;
 
     /**
-     * @var Rate[]
+     * @var Collection|Rate[]
      *
      * @ORM\OneToMany(targetEntity="Rate", mappedBy="article")
      * @Serializer\Groups({"show"})
@@ -185,7 +186,7 @@ class Article
     }
 
     /**
-     * @return Comment[]
+     * @return Collection|Comment[]
      */
     public function getComments()
     {
@@ -193,7 +194,7 @@ class Article
     }
 
     /**
-     * @param Comment[] $comments
+     * @param Collection|Comment[] $comments
      *
      * @return $this
      */
@@ -205,7 +206,7 @@ class Article
     }
 
     /**
-     * @return Rate[]
+     * @return Collection|Rate[]
      */
     public function getRates()
     {
@@ -213,7 +214,7 @@ class Article
     }
 
     /**
-     * @param Rate[] $rates
+     * @param Collection|Rate[] $rates
      *
      * @return $this
      */

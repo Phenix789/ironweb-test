@@ -4,23 +4,27 @@ namespace IronwebBundle\Controller;
 
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Controller\Annotations\View;
+use FOS\RestBundle\Exception\InvalidParameterException;
 use FOS\RestBundle\Request\ParamFetcher;
 use IronwebBundle\Entity\Article;
+use IronwebBundle\Entity\Comment;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /**
- * Class ArticleRestController
+ * Class CommentRestController
  *
  * @package IronwebBundle\Controller
  *
  * @author  <ramseyer.claude@gumi-europe.com>
  */
-class ArticleRestController extends AbstractRestController
+class CommentRestController extends AbstractRestController
 {
 
     /**
-     * @return array|\IronwebBundle\Entity\Article[]
+     * @param Article $article
+     *
+     * @return Comment[]
      *
      * @author <ramseyer.claude@gumi-europe.com>
      *
@@ -28,113 +32,118 @@ class ArticleRestController extends AbstractRestController
      *
      * @ApiDoc(
      *     resource=true,
-     *     description="Retrieve a list of articles",
+     *     description="Retrieve a list of comments",
      *     statusCodes={
      *       200 = "Returned when successful"
      *     }
      * )
      */
-    public function getArticlesAction()
+    public function getCommentsAction(Article $article)
     {
-        return array('articles' => $this->getArticleRepository()->findAll());
+        return $article->getComments();
     }
 
     /**
      * @param Article $article
+     * @param Comment $comment
      *
-     * @return array
+     * @return Comment
      *
      * @author <ramseyer.claude@gumi-europe.com>
      *
      * @View(serializerGroups={"show"})
-     * @ParamConverter("article", class="IronwebBundle:Article")
+     * @ParamConverter("comment", class="IronwebBundle:Comment")
      *
      * @ApiDoc(
      *     resource=true,
-     *     description="Retrieve an article",
+     *     description="Retrieve a comment",
      *     statusCodes={
      *       200 = "Returned when successful"
      *     }
      * )
      */
-    public function getArticleAction(Article $article)
+    public function getCommentAction(Article $article, Comment $comment)
     {
-        return array('article' => $article);
+        $this->check($article, $comment);
+
+        return $comment;
     }
 
     /**
+     * @param Article      $article
      * @param ParamFetcher $param
      *
-     * @return Article|\FOS\RestBundle\View\View
+     * @return \FOS\RestBundle\View\View|Comment
      *
      * @author <ramseyer.claude@gumi-europe.com>
      *
      * @View(serializerGroups={"show"})
      *
-     * @RequestParam(name="title")
      * @RequestParam(name="content")
      * @RequestParam(name="date", nullable=true)
      *
      * @ApiDoc(
      *     resource=true,
-     *     description="Create a new article",
+     *     description="Create a new comment",
      *     statusCodes={
      *       200 = "Returned when successful",
      *       400 = "Errors"
      *     }
      * )
      */
-    public function postArticleAction(ParamFetcher $param)
+    public function postCommentAction(Article $article, ParamFetcher $param)
     {
-        return $this->handle($this->getArticleService()->createEntity(), $param);
+        return $this->handle($this->getCommentService()->createEntity($article), $param);
     }
 
     /**
      * @param Article      $article
+     * @param Comment      $comment
      * @param ParamFetcher $param
      *
-     * @return \FOS\RestBundle\View\View|Article
+     * @return \FOS\RestBundle\View\View|Comment
      *
      * @author <ramseyer.claude@gumi-europe.com>
      *
      * @View(serializerGroups={"show"})
      *
-     * @RequestParam(name="title", nullable=true)
      * @RequestParam(name="content", nullable=true)
      * @RequestParam(name="date", nullable=true)
      *
      * @ApiDoc(
      *     resource=true,
-     *     description="Update an article",
+     *     description="Update a comment",
      *     statusCodes={
      *       200 = "Returned when successful",
      *       400 = "Errors"
      *     }
      * )
      */
-    public function putArticleAction(Article $article, ParamFetcher $param)
+    public function putCommentAction(Article $article, Comment $comment, ParamFetcher $param)
     {
-        return $this->handle($article, $param);
+        $this->check($article, $comment);
+
+        return $this->handle($comment, $param);
     }
 
     /**
-     * @param Article      $article
+     * @param Comment      $comment
      * @param ParamFetcher $param
      *
-     * @return \FOS\RestBundle\View\View|Article
+     * @return \FOS\RestBundle\View\View|Comment
      *
      * @author <ramseyer.claude@gumi-europe.com>
      */
-    private function handle(Article $article, ParamFetcher $param)
+    private function handle(Comment $comment, ParamFetcher $param)
     {
-        $service = $this->getArticleService();
+        $service = $this->getCommentService();
 
-        $service->hydrate($article, $param->all());
-        $errors = $service->validate($article);
+        $service->hydrate($comment, $param->all());
+        $errors = $service->validate($comment);
         if (!count($errors)) {
-            $service->save($article);
+            $service->save($comment);
 
-            return $article;
+            return $comment;
         }
         else {
             return $this->createViewError($errors);
@@ -142,23 +151,30 @@ class ArticleRestController extends AbstractRestController
     }
 
     /**
-     * @return \IronwebBundle\Service\ArticleService
+     * @param Article $article
+     * @param Comment $comment
+     *
+     * @return bool
      *
      * @author <ramseyer.claude@gumi-europe.com>
      */
-    private function getArticleService()
+    private function check(Article $article, Comment $comment)
     {
-        return $this->get('ironweb.api.article');
+        if ($comment->getArticle()->getId() !== $article->getId()) {
+            throw new InvalidParameterException('Invalid comment');
+        }
+
+        return true;
     }
 
     /**
-     * @return \Doctrine\Common\Persistence\ObjectRepository|\IronwebBundle\Entity\ArticleRepository
+     * @return \IronwebBundle\Service\CommentService
      *
      * @author <ramseyer.claude@gumi-europe.com>
      */
-    private function getArticleRepository()
+    private function getCommentService()
     {
-        return $this->getDoctrine()->getRepository(Article::class);
+        return $this->get('ironweb.api.comment');
     }
 
 }

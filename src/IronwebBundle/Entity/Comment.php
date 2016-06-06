@@ -27,6 +27,7 @@ class Comment
      * @ORM\GeneratedValue(strategy="AUTO")
      *
      * @Serializer\Expose()
+     * @Serializer\Groups({"list", "show"})
      */
     private $id;
 
@@ -39,6 +40,7 @@ class Comment
      * @Constraints\NotBlank()
      *
      * @Serializer\Expose()
+     * @Serializer\Groups({"list", "show"})
      */
     private $content;
 
@@ -48,6 +50,7 @@ class Comment
      * @ORM\Column(name="date", type="datetime")
      *
      * @Serializer\Expose()
+     * @Serializer\Groups({"list", "show"})
      */
     private $date;
 
