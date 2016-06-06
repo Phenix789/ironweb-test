@@ -65,7 +65,7 @@ class CommentService
         if (isset($param['user'])) {
             $comment->setUser($param['user']);
         }
-        
+
         if (isset($param['content'])) {
             $comment->setContent($param['content']);
         }
