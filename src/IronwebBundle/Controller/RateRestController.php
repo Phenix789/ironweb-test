@@ -9,7 +9,6 @@ use IronwebBundle\Entity\Article;
 use IronwebBundle\Entity\Rate;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Component\Routing\Exception\InvalidParameterException;
 
 /**
  * Class RateRestController
@@ -64,9 +63,11 @@ class RateRestController extends AbstractRestController
      */
     public function getRateAction(Article $article, Rate $rate)
     {
-        $this->check($article, $rate);
+        if ($this->check($article, $rate)) {
+            return $rate;
+        }
 
-        return $rate;
+        return $this->createViewError(array('Bad request'));
     }
 
     /**
@@ -79,7 +80,7 @@ class RateRestController extends AbstractRestController
      *
      * @View(serializerGroups={"show"})
      *
-     * @RequestParam(name="content")
+     * @RequestParam(name="rate")
      * @RequestParam(name="date", nullable=true)
      *
      * @ApiDoc(
@@ -98,7 +99,7 @@ class RateRestController extends AbstractRestController
 
     /**
      * @param Article      $article
-     * @param Rate         $rate
+     * @param Rate         $r
      * @param ParamFetcher $param
      *
      * @return \FOS\RestBundle\View\View|Rate
@@ -107,7 +108,7 @@ class RateRestController extends AbstractRestController
      *
      * @View(serializerGroups={"show"})
      *
-     * @RequestParam(name="content", nullable=true)
+     * @RequestParam(name="rate", nullable=true)
      * @RequestParam(name="date", nullable=true)
      *
      * @ApiDoc(
@@ -119,11 +120,13 @@ class RateRestController extends AbstractRestController
      *     }
      * )
      */
-    public function putRateAction(Article $article, Rate $rate, ParamFetcher $param)
+    public function putRateAction(Article $article, Rate $r, ParamFetcher $param)
     {
-        $this->check($article, $rate);
+        if ($this->check($article, $r)) {
+            return $this->handle($r, $param);
+        }
 
-        return $this->handle($rate, $param);
+        return $this->createViewError(array('Bad request'));
     }
 
     /**
@@ -146,7 +149,7 @@ class RateRestController extends AbstractRestController
             return $rate;
         }
         else {
-            return $this->createViewError($errors);
+            return $this->createViewFromValidationError($errors);
         }
     }
 
@@ -160,11 +163,7 @@ class RateRestController extends AbstractRestController
      */
     private function check(Article $article, Rate $rate)
     {
-        if ($rate->getArticle()->getId() !== $article->getId()) {
-            throw new InvalidParameterException('Invalid rate');
-        }
-
-        return true;
+        return $rate->getArticle()->getId() === $article->getId();
     }
 
     /**

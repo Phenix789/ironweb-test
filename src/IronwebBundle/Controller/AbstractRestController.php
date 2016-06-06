@@ -4,6 +4,7 @@ namespace IronwebBundle\Controller;
 
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\View\View;
+use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 /**
@@ -17,25 +18,41 @@ abstract class AbstractRestController extends FOSRestController
 {
 
     /**
+     * @param array $messages
+     *
+     * @return static
+     *
+     * @author <ramseyer.claude@gumi-europe.com>
+     */
+    protected function createViewError(array $messages)
+    {
+        $view = View::create($messages);
+        $view->setStatusCode(400);
+
+        return $view;
+    }
+
+    /**
      * @param ConstraintViolationListInterface $errors
      *
      * @return \FOS\RestBundle\View\View
      *
      * @author <ramseyer.claude@gumi-europe.com>
      */
-    protected function createViewError(ConstraintViolationListInterface $errors)
+    protected function createViewFromValidationError(ConstraintViolationListInterface $errors)
     {
-        $msgs = array();
-        foreach ($errors as $validationError) {
-            $msg                                         = $validationError->getMessage();
-            $params                                      = $validationError->getMessageParameters();
-            $msgs[$validationError->getPropertyPath()][] = $this->get('translator')->trans($msg, $params, 'validators');
+        $messages   = array();
+        $translator = $this->get('translator');
+        /** @var ConstraintViolationInterface $error */
+        foreach ($errors as $error) {
+            $messages[$error->getPropertyPath()][] = $translator->trans(
+                $error->getMessageTemplate(),
+                $error->getParameters(),
+                'validators'
+            );
         }
 
-        $view = View::create($msgs);
-        $view->setStatusCode(400);
-
-        return $view;
+        return $this->createViewError($messages);
     }
 
 }

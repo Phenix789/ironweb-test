@@ -137,7 +137,7 @@ class ArticleRestController extends AbstractRestController
             return $article;
         }
         else {
-            return $this->createViewError($errors);
+            return $this->createViewFromValidationError($errors);
         }
     }
 

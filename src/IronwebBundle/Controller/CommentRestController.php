@@ -4,7 +4,6 @@ namespace IronwebBundle\Controller;
 
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Controller\Annotations\View;
-use FOS\RestBundle\Exception\InvalidParameterException;
 use FOS\RestBundle\Request\ParamFetcher;
 use IronwebBundle\Entity\Article;
 use IronwebBundle\Entity\Comment;
@@ -64,9 +63,11 @@ class CommentRestController extends AbstractRestController
      */
     public function getCommentAction(Article $article, Comment $comment)
     {
-        $this->check($article, $comment);
+        if ($this->check($article, $comment)) {
+            return $comment;
+        }
 
-        return $comment;
+        return $this->createViewError(array('Bad request'));
     }
 
     /**
@@ -121,9 +122,11 @@ class CommentRestController extends AbstractRestController
      */
     public function putCommentAction(Article $article, Comment $comment, ParamFetcher $param)
     {
-        $this->check($article, $comment);
+        if ($this->check($article, $comment)) {
+            return $this->handle($comment, $param);
+        }
 
-        return $this->handle($comment, $param);
+        return $this->createViewError(array('Bad request'));
     }
 
     /**
@@ -146,7 +149,7 @@ class CommentRestController extends AbstractRestController
             return $comment;
         }
         else {
-            return $this->createViewError($errors);
+            return $this->createViewFromValidationError($errors);
         }
     }
 
@@ -160,11 +163,7 @@ class CommentRestController extends AbstractRestController
      */
     private function check(Article $article, Comment $comment)
     {
-        if ($comment->getArticle()->getId() !== $article->getId()) {
-            throw new InvalidParameterException('Invalid comment');
-        }
-
-        return true;
+        return $comment->getArticle()->getId() === $article->getId();
     }
 
     /**
