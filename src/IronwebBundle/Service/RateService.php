@@ -62,6 +62,10 @@ class RateService
      */
     public function hydrate(Rate $rate, array $param)
     {
+        if (isset($param['user'])) {
+            $rate->setUser($param['user']);
+        }
+        
         if (isset($param['rate'])) {
             $rate->setRate($param['rate']);
         }

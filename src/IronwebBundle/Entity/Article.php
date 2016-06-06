@@ -35,6 +35,19 @@ class Article
     /**
      * @var string
      *
+     * @ORM\Column(name="user", type="string", length=255)
+     *
+     * @Constraints\NotNull()
+     * @Constraints\NotBlank()
+     *
+     * @Serializer\Expose()
+     * @Serializer\Groups({"list", "show"})
+     */
+    private $user;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="title", type="string", length=255)
      *
      * @Constraints\NotNull()
@@ -121,6 +134,26 @@ class Article
     public function setId($id)
     {
         $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param string $user
+     *
+     * @return $this
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
 
         return $this;
     }

@@ -55,6 +55,10 @@ class ArticleService
      */
     public function hydrate(Article $article, array $param)
     {
+        if (isset($param['user'])) {
+            $article->setUser($param['user']);
+        }
+
         if (isset($param['title'])) {
             $article->setTitle($param['title']);
         }

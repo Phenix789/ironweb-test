@@ -71,6 +71,7 @@ class ArticleRestController extends AbstractRestController
      *
      * @View(serializerGroups={"show"})
      *
+     * @RequestParam(name="user")
      * @RequestParam(name="title")
      * @RequestParam(name="content")
      * @RequestParam(name="date", nullable=true)
@@ -99,6 +100,7 @@ class ArticleRestController extends AbstractRestController
      *
      * @View(serializerGroups={"show"})
      *
+     * @RequestParam(name="user", nullable=true)
      * @RequestParam(name="title", nullable=true)
      * @RequestParam(name="content", nullable=true)
      * @RequestParam(name="date", nullable=true)

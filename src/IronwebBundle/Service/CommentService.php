@@ -62,6 +62,10 @@ class CommentService
      */
     public function hydrate(Comment $comment, array $param)
     {
+        if (isset($param['user'])) {
+            $comment->setUser($param['user']);
+        }
+        
         if (isset($param['content'])) {
             $comment->setContent($param['content']);
         }

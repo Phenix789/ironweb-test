@@ -80,6 +80,7 @@ class RateRestController extends AbstractRestController
      *
      * @View(serializerGroups={"show"})
      *
+     * @RequestParam(name="user")
      * @RequestParam(name="rate")
      * @RequestParam(name="date", nullable=true)
      *
@@ -108,6 +109,7 @@ class RateRestController extends AbstractRestController
      *
      * @View(serializerGroups={"show"})
      *
+     * @RequestParam(name="user", nullable=true)
      * @RequestParam(name="rate", nullable=true)
      * @RequestParam(name="date", nullable=true)
      *

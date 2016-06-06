@@ -80,6 +80,7 @@ class CommentRestController extends AbstractRestController
      *
      * @View(serializerGroups={"show"})
      *
+     * @RequestParam(name="user")
      * @RequestParam(name="content")
      * @RequestParam(name="date", nullable=true)
      *
@@ -108,6 +109,7 @@ class CommentRestController extends AbstractRestController
      *
      * @View(serializerGroups={"show"})
      *
+     * @RequestParam(name="user", nullable=true)
      * @RequestParam(name="content", nullable=true)
      * @RequestParam(name="date", nullable=true)
      *
