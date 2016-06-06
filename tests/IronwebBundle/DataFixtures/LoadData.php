@@ -58,7 +58,7 @@ class LoadData implements FixtureInterface
     private function createRandomArticles(ObjectManager $manager, $nbArticles, $nbCommentsMax, $nbRatesMax)
     {
         $faker = Factory::create();
-w   
+
         $i = 0;
         while ($i++ < $nbArticles) {
             //Article
