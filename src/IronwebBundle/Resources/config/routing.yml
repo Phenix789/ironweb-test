@@ -6,3 +6,8 @@ comment:
     type: rest
     parent: article
     resource: "@IronwebBundle/Controller/CommentRestController.php"
+
+rate:
+    type: rest
+    parent: article
+    resource: "@IronwebBundle/Controller/RateRestController.php"

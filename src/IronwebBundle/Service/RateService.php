@@ -4,17 +4,17 @@ namespace IronwebBundle\Service;
 
 use Doctrine\ORM\EntityManager;
 use IronwebBundle\Entity\Article;
-use IronwebBundle\Entity\Comment;
+use IronwebBundle\Entity\Rate;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
- * Class CommentService
+ * Class RateService
  *
  * @package IronwebBundle\Service
  *
  * @author  <ramseyer.claude@gumi-europe.com>
  */
-class CommentService
+class RateService
 {
 
     /** @var EntityManager */
@@ -24,7 +24,7 @@ class CommentService
     private $validator;
 
     /**
-     * CommentService constructor.
+     * RateService constructor.
      *
      * @param EntityManager      $entityManager
      * @param ValidatorInterface $validator
@@ -38,59 +38,59 @@ class CommentService
     /**
      * @param Article $article
      *
-     * @return Comment
+     * @return Rate
      *
      * @author <ramseyer.claude@gumi-europe.com>
      */
     public function createEntity(Article $article = null)
     {
-        $comment = new Comment();
-        $comment->setDate(new \DateTime());
+        $rate = new Rate();
+        $rate->setDate(new \DateTime());
 
         if ($article) {
-            $comment->setArticle($article);
+            $rate->setArticle($article);
         }
 
-        return $comment;
+        return $rate;
     }
 
     /**
-     * @param Comment $comment
-     * @param array   $param
+     * @param Rate  $rate
+     * @param array $param
      *
      * @author <ramseyer.claude@gumi-europe.com>
      */
-    public function hydrate(Comment $comment, array $param)
+    public function hydrate(Rate $rate, array $param)
     {
-        if (isset($param['content'])) {
-            $comment->setContent($param['content']);
+        if (isset($param['rate'])) {
+            $rate->setRate($param['rate']);
         }
 
         if (isset($param['date'])) {
-            $comment->setDate(new \DateTime($param['date']));
+            $rate->setDate(new \DateTime($param['date']));
         }
     }
 
     /**
-     * @param Comment $comment
+     * @param Rate $rate
      *
      * @return \Symfony\Component\Validator\ConstraintViolationListInterface
      *
      * @author <ramseyer.claude@gumi-europe.com>
      */
-    public function validate(Comment $comment)
+    public function validate(Rate $rate)
     {
-        return $this->validator->validate($comment);
+        return $this->validator->validate($rate);
     }
 
     /**
-     * @param Comment $comment
+     * @param Rate $rate
      *
      * @author <ramseyer.claude@gumi-europe.com>
      */
-    public function save(Comment $comment)
+    public function save(Rate $rate)
     {
-        $this->entityManager->persist($comment);
+        $this->entityManager->persist($rate);
         $this->entityManager->flush();
     }
 

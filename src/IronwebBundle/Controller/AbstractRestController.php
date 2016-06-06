@@ -13,7 +13,7 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
  *
  * @author  <ramseyer.claude@gumi-europe.com>
  */
-class AbstractRestController extends FOSRestController
+abstract class AbstractRestController extends FOSRestController
 {
 
     /**

@@ -30,6 +30,7 @@ class Rate
      * @ORM\GeneratedValue(strategy="AUTO")
      *
      * @Serializer\Expose()
+     * @Serializer\Groups({"list", "show"})
      */
     private $id;
 
@@ -41,6 +42,7 @@ class Rate
      * @Constraints\Range(min=0, max=5)
      *
      * @Serializer\Expose()
+     * @Serializer\Groups({"list", "show"})
      */
     private $rate;
 
@@ -50,6 +52,7 @@ class Rate
      * @ORM\Column(name="date", type="datetime")
      *
      * @Serializer\Expose()
+     * @Serializer\Groups({"list", "show"})
      */
     private $date;
 

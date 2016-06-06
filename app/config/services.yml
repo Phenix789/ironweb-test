@@ -11,3 +11,7 @@ services:
     ironweb.api.comment:
         class: IronwebBundle\Service\CommentService
         arguments: [ '@doctrine.orm.entity_manager', '@validator' ]
+
+    ironweb.api.rate:
+        class: IronwebBundle\Service\RateService
+        arguments: [ '@doctrine.orm.entity_manager', '@validator' ]
